@@ -1,2 +1,2 @@
 # assimp_latest
-Install script which gets the latest copy of assimp/pyassimp and installs it
+Simple install script which gets the latest copy of assimp/pyassimp, builds and installs it automatically.
