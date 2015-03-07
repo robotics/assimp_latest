@@ -5,7 +5,9 @@ import os
 import sys
 from shutil import rmtree
 from subprocess import check_call
-from distutils.core import run_setup
+
+from distutils.core import setup
+from distutils.command.build import build
 
 ASSIMP_CMAKE_URL = 'http://raw.github.com/assimp/assimp/master/CMakeLists.txt'
 ASSIMP_URL       = 'https://github.com/assimp/assimp.git'
@@ -13,11 +15,12 @@ ASSIMP_PYTHON    = 'port/PyAssimp'
 
 def get_assimp_version():
     cmakelists = urllib2.urlopen(ASSIMP_CMAKE_URL).read()
-    major = int(re.findall('(?<=ASSIMP_VERSION_MAJOR) \d', cmakelists)[0])
-    minor = int(re.findall('(?<=ASSIMP_VERSION_MINOR) \d', cmakelists)[0])
-    patch = int(re.findall('(?<=ASSIMP_VERSION_PATCH) \d', cmakelists)[0])
-    return major, minor, patch
-     
+    major = re.findall('(?<=ASSIMP_VERSION_MAJOR) \d', cmakelists)[0].strip()
+    minor = re.findall('(?<=ASSIMP_VERSION_MINOR) \d', cmakelists)[0].strip()
+    patch = re.findall('(?<=ASSIMP_VERSION_PATCH) \d', cmakelists)[0].strip()
+    version_string = '.'.join([major, minor, patch])
+    return version_string
+
 def install_assimp():
     temp_dir = tempfile.mkdtemp()
     cwd      = os.getcwd()
@@ -33,5 +36,13 @@ def install_assimp():
         os.chdir(cwd)
         rmtree(temp_dir)
 
-if __name__ == '__main__':
-    if 'install' in sys.argv: install_assimp()
+class _build(build):
+    def run(self):
+        install_assimp()
+
+setup(
+    name    = 'assimp_latest',
+    description = 'assimp/pyassimp fresh off github',
+    version = get_assimp_version(),
+    cmdclass={'build': _build}
+)
