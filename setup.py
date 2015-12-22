@@ -26,17 +26,17 @@ def install_assimp():
     temp_dir = os.path.join(tempfile.gettempdir(), 'assimp_' + str(int(time.time())))
     cwd      = os.getcwd()
 
-    try:
-        check_call(['git', 'clone', ASSIMP_URL, temp_dir])
-        os.chdir(temp_dir)
-        check_call(['cmake', '.'])
-        check_call(['make'])
-        check_call(['make', 'install'])
-        os.chdir(os.path.join(temp_dir, ASSIMP_PYTHON))
-        check_call(['python', 'setup.py', 'install'])
-    finally:
-        os.chdir(cwd)
-        rmtree(temp_dir)
+    #try:
+    check_call(['git', 'clone', ASSIMP_URL, temp_dir])
+    os.chdir(temp_dir)
+    check_call(['cmake', '.'])
+    check_call(['make'])
+    check_call(['make', 'install'])
+    os.chdir(os.path.join(temp_dir, ASSIMP_PYTHON))
+    check_call(['python', 'setup.py', 'install'])
+    #finally:
+    os.chdir(cwd)
+    rmtree(temp_dir)
         
 class _build(build):
     def run(self):
