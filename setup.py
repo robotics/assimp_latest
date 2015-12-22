@@ -24,6 +24,7 @@ def get_assimp_version():
 
 def install_assimp():
     temp_dir = os.path.join(tempfile.gettempdir(), 'assimp_' + str(int(time.time())))
+    os.makedirs(temp_dir)
     cwd      = os.getcwd()
 
     #try:
