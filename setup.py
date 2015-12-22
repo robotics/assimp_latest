@@ -3,6 +3,7 @@ import re
 import tempfile
 import os
 import sys
+import time
 from shutil import rmtree
 from subprocess import check_call
 
@@ -22,8 +23,9 @@ def get_assimp_version():
     return version_string
 
 def install_assimp():
-    temp_dir = tempfile.mkdtemp()
+    temp_dir = os.path.join(tempfile.gettempdir(), 'assimp_' + str(int(time.time())))
     cwd      = os.getcwd()
+
     try:
         check_call(['git', 'clone', ASSIMP_URL, temp_dir])
         os.chdir(temp_dir)
@@ -35,7 +37,7 @@ def install_assimp():
     finally:
         os.chdir(cwd)
         rmtree(temp_dir)
-
+        
 class _build(build):
     def run(self):
         install_assimp()
