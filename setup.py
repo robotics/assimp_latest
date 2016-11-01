@@ -12,8 +12,10 @@ from distutils.command.build import build
 
 # python 3
 try:
+    python_command = 'python'
     from urllib2 import urlopen
 except ImportError:
+    python_command = 'python3'
     from urllib.request import urlopen
 
 ASSIMP_CMAKE_URL = 'http://raw.github.com/assimp/assimp/master/CMakeLists.txt'
@@ -43,7 +45,7 @@ def install_assimp():
         check_call(['make'])
         check_call(['make', 'install'])
         os.chdir(os.path.join(temp_dir, ASSIMP_PYTHON))
-        check_call(['python', 'setup.py', 'install'])
+        check_call([python_command, 'setup.py', 'install'])
     finally:
         os.chdir(cwd)
         rmtree(temp_dir)
